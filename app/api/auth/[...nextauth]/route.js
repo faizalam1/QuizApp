@@ -16,9 +16,13 @@ const authHandler = NextAuth({
       async authorize(credentials, req) {
         const { emailOrUsername, password } = credentials;
         //TODO: implement authentication
-        const user = await User.findOne({ email: emailOrUsername }) || await User.findOne({ username: emailOrUsername });
-        if (user) {
-          return user;
+        const user = await User.findOne({ $or: [{ "email": emailOrUsername }, { "username": emailOrUsername }] });
+        if (user && user.password == bcrypt.hash(password, 10)) {
+          return {
+            id: user._id,
+            name: user.username,
+            email: user.email
+          };
         } else {
           return null;
         }

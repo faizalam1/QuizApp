@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 
+
 const SignUp = () => {
     const [formdata, setFormdata] = useState({
         email: '',
@@ -18,6 +19,35 @@ const SignUp = () => {
     });
 
     const [passwordStrong, setPasswordStrong] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const { email, username, password, confirmPassword } = formdata;
+        if (password !== confirmPassword) {
+            alert("Passwords do not match");
+            return;
+        }
+        const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                username: username,
+                password: password
+            })
+        });
+        if (res.status == 201)
+            alert("User created successfully");
+        else if (res.status == 400)
+            alert("Email or username are not valid");
+        else if (res.status == 409)
+            alert("Email or username is already taken");
+        else
+            alert("User creation failed");
+    }
+
     useEffect(() => {
         const emailRegex = new RegExp(/^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/);
         if (emailRegex.test(formdata.email)) {
@@ -198,27 +228,7 @@ const SignUp = () => {
                     <div>
                         <button
                             type="submit"
-                            onClick={
-                                async (e) => {
-                                    e.preventDefault();
-                                    const { email, username, password, confirmPassword } = formdata;
-                                    if (password !== confirmPassword) {
-                                        alert("Passwords do not match");
-                                        return;
-                                    }
-                                    const res = await fetch('/api/auth/register', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify({
-                                            email: email,
-                                            username: username,
-                                            password: password
-                                        })
-                                    });
-                                }
-                            }
+                            onClick={handleSubmit}
                             disabled={formValid.email && formValid.username &&
                                 formdata.password.length >= 8 &&
                                 Boolean(formdata.password.match(/[a-z]/)) &&

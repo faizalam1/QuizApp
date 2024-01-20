@@ -1,7 +1,19 @@
 'use client'
+import { signIn } from 'next-auth/react';
 import useState from 'react';
 
 const SignIn = () => {
+    const [emailOrUsername, setEmailOrUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignIn = (e) => {
+        e.preventDefault();
+        signIn('credentials', {
+            emailOrUsername: emailOrUsername,
+            password: password
+        });
+    }
+
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -21,6 +33,7 @@ const SignIn = () => {
                                 id="emailOrUsername"
                                 name="emailOrUsername"
                                 type="text"
+                                onChange={(e) => setEmailOrUsername(e.target.value)}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
                             />
@@ -44,6 +57,7 @@ const SignIn = () => {
                                 name="password"
                                 type="password"
                                 autoComplete="current-password"
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
                             />
@@ -53,6 +67,7 @@ const SignIn = () => {
                     <div>
                         <button
                             type="submit"
+                            onClick={handleSignIn}
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             Sign in

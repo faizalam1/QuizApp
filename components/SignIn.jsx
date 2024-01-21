@@ -1,17 +1,21 @@
 'use client'
 import { signIn } from 'next-auth/react';
-import useState from 'react';
-
+import { useState } from 'react';
 const SignIn = () => {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSignIn = (e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
-        signIn('credentials', {
+        const response = await signIn('credentials', {
             emailOrUsername: emailOrUsername,
-            password: password
+            password: password,
+            redirect: false
         });
+        if (response.status == 200)
+            alert('Sign in success');
+        else
+            alert('Sign in failed');
     }
 
     return (

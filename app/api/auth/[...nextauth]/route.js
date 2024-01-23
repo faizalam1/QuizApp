@@ -2,11 +2,28 @@ import User from "@models/user";
 import { connectToDB } from "@utils/database";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import bcrypt, { compareSync } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const authHandler = NextAuth({
   session: {
     strategy: "jwt"
+  },
+  pages: {
+    signIn: "/auth",
+  },
+  callbacks: {
+    async jwt(token, user, account, profile, isNewUser) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session(session, token) {
+      session.user.id = token.id;
+      session.user.username = token.username;
+      session.user.email = token.email;
+      return session;
+    }
   },
   providers: [
     CredentialsProvider({
@@ -30,7 +47,7 @@ const authHandler = NextAuth({
           console.log(user, emailOrUsername, password);
           return {
             id: user._id,
-            name: user.username,
+            username: user.username,
             email: user.email
           }
         } else {

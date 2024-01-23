@@ -1,7 +1,14 @@
 import SignIn from "@components/SignIn";
 import SignUp from "@components/SignUp";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-const authPage = () => {
+const authPage = async () => {
+    const session = await getServerSession();
+    if (session){
+        redirect("/courses")
+    }
+
     return (
         <div className="flex-auto md:flex w-full h-full">
             <section className="w-full">

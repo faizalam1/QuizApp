@@ -18,6 +18,15 @@ const UserSchema = new Schema({
     type: String,
     required: [true, 'Password is required!'],
     match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,20})/, "Password invalid, it should contain at least 1 lowercase letter, 1 uppercase letter, 1 number, 1 special character and be 8-20 characters long!"]
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  created: {
+    type: Date,
+    default: Date.now
   }
 });
 

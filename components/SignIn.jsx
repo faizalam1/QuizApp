@@ -1,9 +1,12 @@
 'use client'
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
 const SignIn = () => {
     const [emailOrUsername, setEmailOrUsername] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     const handleSignIn = async (e) => {
         e.preventDefault();
@@ -13,7 +16,11 @@ const SignIn = () => {
             redirect: false
         });
         if (response.status == 200)
+            {
             alert('Sign in success');
+            router.push('/courses');
+            router.refresh();
+            }
         else
             alert('Sign in failed');
     }

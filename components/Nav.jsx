@@ -1,22 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { signOut, useSession, getProviders } from "next-auth/react";
+import NavMobile from "./NavMobile";
+import SignoutButton from "./SignoutButton";
+import { getServerSession } from "next-auth";
 
-const Nav = () => {
-  // const { data: session } = useSession();
-  const isLogged = false;
-  const [providers, setProviders] = useState(null);
-  const [toggleDropdown, setToggleDropdown] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res);
-    })();
-  }, []);
+const Nav = async () => {
+  const session = await getServerSession();
 
   return (
     <nav className='flex-between w-full mb-16 pt-3'>
@@ -32,19 +21,17 @@ const Nav = () => {
 
       {/* Desktop Navigation */}
       <div className='sm:flex hidden'>
-        {isLogged ? (
+        {session ? (
           <div className='flex gap-3 md:gap-5'>
-            <Link href='/create-prompt' className='black_btn'>
-              Create Post
+            <Link href='/courses' className='black_btn'>
+              Courses
             </Link>
 
-            <button type='button' onClick={signOut} className='outline_btn'>
-              Sign Out
-            </button>
+            <SignoutButton />
 
             <Link href='/profile'>
               <Image
-                // src={session?.user.image}
+                src="/assets/icons/profile-circle.svg"
                 width={37}
                 height={37}
                 className='rounded-full'
@@ -65,58 +52,7 @@ const Nav = () => {
       </div>
 
       {/* Mobile Navigation */}
-      <div className='sm:hidden flex relative'>
-        {isLogged ? (
-          <div className='flex'>
-            <Image
-              src={session?.user.image}
-              width={37}
-              height={37}
-              className='rounded-full'
-              alt='profile'
-              onClick={() => setToggleDropdown(!toggleDropdown)}
-            />
-
-            {toggleDropdown && (
-              <div className='dropdown'>
-                <Link
-                  href='/profile'
-                  className='dropdown_link'
-                  onClick={() => setToggleDropdown(false)}
-                >
-                  My Profile
-                </Link>
-                <Link
-                  href='/create-prompt'
-                  className='dropdown_link'
-                  onClick={() => setToggleDropdown(false)}
-                >
-                  Create Prompt
-                </Link>
-                <button
-                  type='button'
-                  onClick={() => {
-                    setToggleDropdown(false);
-                    signOut();
-                  }}
-                  className='mt-5 w-full black_btn'
-                >
-                  Sign Out
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Link href='/auth'>
-            <button
-              type='button'
-              className='black_btn'
-            >
-              Sign Up / Sign in
-            </button>
-          </Link>
-        )}
-      </div>
+      <NavMobile session={session} />
     </nav>
   );
 };

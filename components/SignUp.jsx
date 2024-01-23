@@ -1,8 +1,8 @@
 'use client'
+import { signIn } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
-
-
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
     const [formdata, setFormdata] = useState({
@@ -19,6 +19,9 @@ const SignUp = () => {
     });
 
     const [passwordStrong, setPasswordStrong] = useState(false);
+
+    const router = useRouter();
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,8 +41,15 @@ const SignUp = () => {
                 password: password
             })
         });
-        if (res.status == 201)
-            alert("User created successfully");
+        if (res.status == 201){
+            signIn('credentials', {
+                emailOrUsername: email,
+                password: password,
+                redirect: false
+            });
+            router.push('/courses');
+            router.refresh();
+        }
         else if (res.status == 400)
             alert("Email or username are not valid");
         else if (res.status == 409)

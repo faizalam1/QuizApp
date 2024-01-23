@@ -15,14 +15,16 @@ const SignIn = () => {
             password: password,
             redirect: false
         });
-        if (response.status == 200)
-            {
-            alert('Sign in success');
+        if (response.status == 200) {
+            // alert('Sign in success');
             router.push('/courses');
             router.refresh();
-            }
-        else
+        }
+        else {
             alert('Sign in failed');
+            router.push('/auth');
+            router.refresh();
+        }
     }
 
     return (

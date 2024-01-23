@@ -4,7 +4,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from 'bcrypt';
 
-const authHandler = NextAuth({
+export const authOptions = {
   session: {
     strategy: "jwt"
   },
@@ -12,16 +12,19 @@ const authHandler = NextAuth({
     signIn: "/auth",
   },
   callbacks: {
-    async jwt(token, user, account, profile, isNewUser) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
+    async jwt({token, user, account, profile}) {
+      if (user)
+        return {...token,user,account,profile}
+      else
+        return {...token}
     },
-    async session(session, token) {
-      session.user.id = token.id;
-      session.user.username = token.username;
-      session.user.email = token.email;
+    async session({ session, token }){
+      if (Date.now() / 1000 > token?.accessTokenExpires && token?.refreshTokenExpires && Date.now() / 1000 > token?.refreshTokenExpires) {
+        return {
+          error: new Error("Refresh token has expired. Please log in again to get a new refresh token."),
+        }
+      }
+      session.user = token.user;
       return session;
     }
   },
@@ -48,7 +51,8 @@ const authHandler = NextAuth({
           return {
             id: user._id,
             username: user.username,
-            email: user.email
+            email: user.email,
+            role: user.role
           }
         } else {
           console.error("User not found", emailOrUsername, password)
@@ -59,6 +63,6 @@ const authHandler = NextAuth({
     )
   ]
 }
-);
+const authHandler = NextAuth(authOptions);
 
 export { authHandler as GET, authHandler as POST };

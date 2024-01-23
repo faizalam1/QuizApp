@@ -20,7 +20,7 @@ export async function POST(req) {
     if (userExists) {
         return NextResponse.json({ error: "User already exists" }, { status: 409 })
     }
-    const user = await User.create({ email, username, password });
+    const user = await User.create({ email, username, password, role: "user", created: Date.now()});
     if (!user) {
         return NextResponse.json({ error: "User not created" }, { status: 500 })
     }

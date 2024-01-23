@@ -11,7 +11,6 @@ const CourseSchema = new Schema({
         type: String,
         required: [true, 'Course name is required!'],
         unique: [true, 'Course name already exists!'],
-        match: [/^[a-zA-Z0-9 ]+$/, "Course name invalid, it should contain alphanumeric characters and spaces!"]
     },
     description: {
         type: String,
@@ -20,7 +19,6 @@ const CourseSchema = new Schema({
     organization: {
         type: String,
         required: [true, 'Organization is required!'],
-        match: [/^[a-zA-Z0-9 ]+$/, "Organization invalid, it should contain alphanumeric characters and spaces!"]
     },
     tags: {
         type: [String],

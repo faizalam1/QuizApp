@@ -2,6 +2,9 @@
 const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["mongoose"],
+    serverActions:{
+      allowedOrigins: ["http://localhost:3000",process.env.CODESPACE_DOMAIN]
+    }
   },
   webpack(config) {
     config.experiments = {

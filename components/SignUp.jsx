@@ -41,7 +41,7 @@ const SignUp = () => {
                 password: password
             })
         });
-        if (res.status == 201){
+        if (res.status == 201) {
             signIn('credentials', {
                 emailOrUsername: email,
                 password: password,
@@ -85,7 +85,7 @@ const SignUp = () => {
         const isPasswordStrong =
 
             setPasswordStrong(passwordStrong);
-        console.log(isPasswordStrong);
+
     }, [formdata.password]);
 
     useEffect(() => {

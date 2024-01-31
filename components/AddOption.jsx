@@ -1,24 +1,32 @@
 import { useEffect, useState } from "react";
 
 
-const AddOption = ({ optionNumber, AddOption }) => {
+const AddOption = ({ optionNumber, addOption }) => {
   const [option, setOption] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
 
   useEffect(
     () => {
-      AddOption(option, isCorrect, optionNumber);
+      addOption(option, isCorrect, optionNumber);
     },
     [option, isCorrect]
   )
 
   return (
     <>
-      <label>
+      <p>
         Option {optionNumber}:
-      </label> <br />
+      </p> <br />
+      <label htmlFor="option">
+        Option Text:
+      </label>
       <input className="p-2 m-2" type="text" name="option" placeholder="Option" value={option.option} onChange={e => setOption(e.target.value)} />
-      <input className="p-2 m-2" type="checkbox" name="isCorrect" placeholder="Is Correct" value={option.isCorrect} onChange={e => setIsCorrect(e.target.value)} />
+      <div className="flex justify-center">
+      <label htmlFor="isCorrect">
+        Is Correct:
+      </label>
+      <input className="p-2 m-2" type="checkbox" name="isCorrect" placeholder="Is Correct" value={option.isCorrect} onChange={e => setIsCorrect(!isCorrect)} />
+      </div>
     </>
   )
 }

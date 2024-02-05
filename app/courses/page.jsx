@@ -1,8 +1,11 @@
-
+import CourseList from "@components/CourseList";
 
 const coursesPage = () => {
     return (
-        <div>Courses Page</div>
+        <>
+            <div className="font-bold text-3xl">All Courses</div>
+            <CourseList />
+        </>
     )
 }
 

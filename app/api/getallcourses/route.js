@@ -17,13 +17,14 @@ export async function GET(req) {
         return NextResponse.json({ error: "Database connection error" }, { status: 500 })
     }
     try {
-        const courses = await Course.aggregate({
+        const courses = await Course.aggregate([{
             $group: {
                 _id: "$organization",
                 courses: { $push: "$$ROOT" }
             }
-        }
+        }]
         )
+        return NextResponse.json({ courses }, { status: 200 })
     }
     catch (error) {
         console.error(error);

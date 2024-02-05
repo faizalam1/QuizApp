@@ -27,6 +27,8 @@ export async function POST(req) {
     }
     catch (error) {
         console.error(error);
+        if (error._message == "Course validation failed")
+            return NextResponse.json({ error: "Invalid input" }, { status: 400 })
         return NextResponse.json({ error: "Database connection error" }, { status: 500 })
     }
 }

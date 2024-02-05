@@ -35,7 +35,12 @@ const AddCourse = ({ updateCourse }) => {
       body: JSON.stringify(course),
     });
     const data = await res.json();
-    alert(data);
+    if (res.status == 200)
+      alert('Course added successfully');
+    else if (res.status == 400)
+      alert('Invalid input data Or Course already exists');
+    else
+      alert('Something went wrong');
   };
 
   return (

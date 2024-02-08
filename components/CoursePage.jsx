@@ -42,7 +42,7 @@ const CoursePage = ({ courseId }) => {
         </Link>
         <br />
         <div className="flex flex-row pt-6 justify-center">
-          <Link href={`/courses/${courseId}/mockquiz`} className='flex flex-row justify-center font-medium hover:underline cursor-pointer'>
+          <Link href={`/courses/${courseId}/mocktest`} className='flex flex-row justify-center font-medium hover:underline cursor-pointer'>
             <button className="flex flex-row justify-center bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded">
             <Image src="/assets/icons/test.svg" alt="Take Quiz" width={20} height={20} />
             <div className='ml-2'>Take Test</div>

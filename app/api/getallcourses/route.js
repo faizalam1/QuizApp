@@ -21,8 +21,30 @@ export async function GET(req) {
             $group: {
                 _id: "$organization",
                 courses: { $push: "$$ROOT" }
-            }
-        }]
+            } },
+            { $project: { 
+                _id: 0,
+                organization: "$_id",
+                courses: {
+                    $map: {
+                        input: "$courses",
+                        as: "course",
+                        in: {
+                            id: "$$course.id",
+                            name: "$$course.name",
+                            description: "$$course.description",
+                            tags: "$$course.tags",
+                            examPrice: "$$course.examPrice",
+                            examDuration: "$$course.examDuration",
+                            examQuestions: "$$course.examQuestions",
+                            examPassingPercentage: "$$course.examPassingPercentage",
+                            examLink: "$$course.examLink",
+                            isTestAvailable: "$$course.isTestAvailable"
+                        }
+                    }
+                }
+            }}
+        ]
         )
         return NextResponse.json({ courses }, { status: 200 })
     }

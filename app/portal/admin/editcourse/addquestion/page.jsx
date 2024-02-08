@@ -11,7 +11,7 @@ const addQuestionPage = async () => {
 
     return (
         <div className="flex-col items-center w-full">
-            <h1 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900">Add Questions</h1>
+            <h1 className="mt-10 text-center text-4xl font-bold text-gray-900">Add Question</h1>
             <AddQuestionForm />
         </div>
     )

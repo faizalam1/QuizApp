@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import AddOption from './AddOption';
 
 const AddQuestionForm = () => {
+    const [courseID, setCourseID] = useState("");
     const [question, setQuestion] = useState("");
     const [questionType, setQuestionType] = useState("single");
     const [options, setOptions] = useState([]);
@@ -31,20 +32,27 @@ const AddQuestionForm = () => {
     return (
         <div className='w-full flex flex-col justify-center mt-16'>
             <form className="space-y-6 lg:mx-60 md:mx-40" method="POST">
+            <div className="flex flex-col mb-2">
+                    <label htmlFor="courseID">
+                        Course ID:
+                    </label> <br />
+                    <input className="p-2 m-2" name="courseID" placeholder="Course ID" value={courseID} onChange={e => setCourseID(e.target.value)} />
+                </div>
                 <div className="flex flex-col mb-2">
                     <label htmlFor="question">
                         Question:
                     </label> <br />
-                    <textarea className="p-2 m-2" name="question" placeholder="Question" value={question.question} onChange={e => setQuestion({ ...question, question: e.target.value })} />
+                    <textarea className="p-2 m-2" name="question" placeholder="Question" value={question} onChange={e => setQuestion(e.target.value)} />
                 </div>
 
                 <div className="flex flex-col mb-2">
                     <label htmlFor="questionType">
                         Question Type:
                     </label> <br />
-                    <select className="p-2 m-2" name="questionType" title="Question Type" value={question.questionType} onChange={e => setQuestionType(e.target.value)}>
+                    <select className="p-2 m-2" name="questionType" title="Question Type" value={questionType} onChange={e => setQuestionType(e.target.value)}>
                         <option value="single">Single</option>
                         <option value="multiple">Multiple</option>
+                        <option value="True/False">True/False</option>
                     </select>
                 </div>
 
@@ -58,14 +66,29 @@ const AddQuestionForm = () => {
                 <div className="flex flex-col mb-2">
                     {optionList}
                 </div>
-                <button className="p-2 m-2" type="submit" onClick={
-                    (e) =>
+                <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" type="submit" onClick={
+                    async (e) =>
                     {
                         e.preventDefault();
                         console.log(question);
                         console.log(questionType);
                         console.log(optionNumber);
                         console.log(options);
+                        const res = await fetch('/api/admin/addquestion', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ courseID, question, questionType, options }),
+                        });
+                        if (res.status == 201)
+                            alert('Question added successfully');
+                        else if (res.status == 404)
+                            alert('Course not found');
+                        else if (res.status == 400)
+                            alert('Invalid input data Or Question already exists');
+                        else
+                            alert('Something went wrong');
                     }
                 }>
                     Submit

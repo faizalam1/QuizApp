@@ -5,7 +5,7 @@ const CourseSchema = new Schema({
         type: String,
         required: [true, 'Course ID is required!'],
         unique: [true, 'Course ID already exists!'],
-        match: [/^[a-zA-Z0-9-]+$/, "Course ID invalid, it should contain alphanumeric characters and hyphens!"]
+        match: [/^[a-z0-9-]+$/, "Course ID invalid, it should contain lower-case alphanumeric characters and hyphens!"]
     },
     name: {
         type: String,

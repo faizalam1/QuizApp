@@ -15,8 +15,8 @@ const Questions = ({ courseID }) => {
         fetchdata();
     }, []);
 
-    const handleAnswer = (index, answer) => {
-        setAnswers([...answers.slice(0, index), answer, ...answers.slice(index + 1)]);
+    const handleAnswer = (index, answer, id) => {
+        setAnswers([...answers.slice(0, index), {"id":id,answer}, ...answers.slice(index + 1)]);
     }
     useEffect(() => {
         console.log(answers);

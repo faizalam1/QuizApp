@@ -12,18 +12,18 @@ const questionSchema = new Schema({
     },
     questionType: {
         type: String,
-        enum: ["single", "multiple", "True/False"],
+        enum: ["Single", "Multiple", "True/False", "Dropdown"],
         required: [true, "Question type is required!"],
     },
     options: {
         type: [
             {
                 option: {
-                    type: String,
+                    type: Schema.Types.Mixed,
                     required: [true, "Option is required!"],
                 },
                 isCorrect: {
-                    type: Boolean,
+                    type: Schema.Types.Mixed,
                     required: [true, "isCorrect is required!"],
                 },
             },

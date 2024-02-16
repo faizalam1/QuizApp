@@ -11,7 +11,7 @@ export async function GET(req) {
         return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
     }
     const searchParams = req.nextUrl.searchParams;
-    if(!searchParams.has('course_id')){
+    if (!searchParams.has('course_id')) {
         return NextResponse.json({ error: "No course ID provided" }, { status: 400 })
     }
     const course_id = searchParams.get('course_id');
@@ -23,7 +23,7 @@ export async function GET(req) {
         return NextResponse.json({ error: "Database connection error" }, { status: 500 })
     }
     try {
-        const course = await Course.findOne({"id": course_id});
+        const course = await Course.findOne({ "id": course_id });
         if (!course) {
             return NextResponse.json({ error: `Course ${course_id} not found` }, { status: 404 })
         }
@@ -31,14 +31,23 @@ export async function GET(req) {
         const questions = await Question.aggregate([
             { $match: { courseID: course_id } },
             { $sample: { size: course.examQuestions } },
-            { $project: { 
-                _id: 0,
-                question: 1,
-                questionType: 1,
-                options: { $map: { input: "$options", as: "option", in: "$$option.option" } },
-            } }
+            {
+                $project: {
+                    _id: 1,
+                    question: 1,
+                    questionType: 1,
+                    options: {
+                        $map: {
+                            input: "$options", as: "option", in: {
+                                "id": "$$option._id",
+                                "option": "$$option.option"
+                            }
+                        },
+                    }
+                }
+            }
         ]);
-        return NextResponse.json( questions , { status: 200 })
+        return NextResponse.json(questions, { status: 200 })
     }
     catch (error) {
         console.error(error);
